@@ -3,13 +3,27 @@ var topicsViewDiv = $("#topics-view")
 function displayTopicInfo() {
 
     var gif = $(this).attr("data-name");
-    var queryURL = "https://http://api.giphy.com/v1/gifs/search?q=" + gif + "&apikey=euUgeEMlOInHIg9TGdQqyNO1UtcZ3VG0&limit=5";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gif + "&apikey=euUgeEMlOInHIg9TGdQqyNO1UtcZ3VG0&limit=10";
 
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
+        var results = response.data
+        for (let i = 0; i < results.length; i++) {
+            const gifDiv = $("<div>")
 
+            const rating = results[i].rating
+            var p = $("<p>").text("Rating: " + rating)
+
+            var topicImage = $("<img>")
+            topicImage.attr("src", results[i].images.fixed_height.url)
+
+            gifDiv.prepend(p);
+            gifDiv.prepend(topicImage)
+
+            $("#topics-view").prepend(gifDiv)
+        }
         const mov = $("<div>")
         console.log(response)
         mov.append($("<div>").text(response.Rated))
@@ -38,7 +52,7 @@ $("#add-topic").on("click", function (event) {
     event.preventDefault();
     var movie = $("#topic-input").val().trim();
 
-    topics.push(gif);
+    topics.push(topics);
 
     renderButtons();
 });

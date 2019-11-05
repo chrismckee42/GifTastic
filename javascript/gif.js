@@ -1,5 +1,6 @@
 var topics = ["Dog", "Cat", "Mouse", "Lion"];
 var topicsViewDiv = $("#topics-view")
+
 function displayTopicInfo() {
 
     var gif = $(this).attr("data-name");
@@ -10,6 +11,7 @@ function displayTopicInfo() {
         method: "GET"
     }).then(function (response) {
         var results = response.data
+        console.log(results[0])
         for (let i = 0; i < results.length; i++) {
             const gifDiv = $("<div>")
 
@@ -17,7 +19,11 @@ function displayTopicInfo() {
             var p = $("<p>").text("Rating: " + rating)
 
             var topicImage = $("<img>")
-            topicImage.attr("src", results[i].images.fixed_height.url)
+            topicImage.attr("data-still", results[i].images.fixed_height_still.url)
+            topicImage.attr("data-animate", results[i].images.fixed_height.url)
+            topicImage.attr("data-state", "still")
+            topicImage.addClass("gif")
+            topicImage.attr("src", results[i].images.fixed_height_still.url)
 
             gifDiv.prepend(p);
             gifDiv.prepend(topicImage)
@@ -25,7 +31,7 @@ function displayTopicInfo() {
             $("#topics-view").prepend(gifDiv)
         }
         const mov = $("<div>")
-        console.log(response)
+        //console.log(response)
         mov.append($("<div>").text(response.Rated))
         mov.append($("<div>").text(response.Year))
         mov.append($("<div>").text(response.Plot))
@@ -58,5 +64,17 @@ $("#add-topic").on("click", function (event) {
 });
 
 $(document).on("click", ".topic", displayTopicInfo);
+
+$(document).on("click", ".gif", function () {
+    var state = $(this).attr("data-state");
+    if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+    } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+    }
+});
+
 
 renderButtons();

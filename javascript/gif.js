@@ -50,9 +50,9 @@ function renderButtons() {
 
 $("#add-topic").on("click", function (event) {
     event.preventDefault();
-    var movie = $("#topic-input").val().trim();
+    var topic = $("#topic-input").val().trim();
 
-    topics.push(topics);
+    topics.push(topic);
 
     renderButtons();
 });
